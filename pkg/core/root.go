@@ -15,8 +15,8 @@
 package core
 
 import (
-	"github.com/daisy-ycguo/kn-source-kafka/pkg/source/commands"
-	"github.com/daisy-ycguo/kn-source-kafka/pkg/source/commands/kafka"
+	"github.com/daisy-ycguo/kn-source-kafka/pkg/commands"
+	"github.com/daisy-ycguo/kn-source-kafka/pkg/commands/kafka"
 
 	"github.com/spf13/cobra"
 )

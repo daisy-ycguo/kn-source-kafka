@@ -17,7 +17,7 @@ package kafka
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/daisy-ycguo/kn-source-kafka/pkg/source/commands"
+	"github.com/daisy-ycguo/kn-source-kafka/pkg/commands"
 )
 
 // NewKafkaCommand for managing ApiServer source

@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/daisy-ycguo/kn-source-kafka/pkg/source/core"
+	"github.com/daisy-ycguo/kn-source-kafka/pkg/core"
 )
 
 func main() {
