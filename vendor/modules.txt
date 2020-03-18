@@ -446,6 +446,7 @@ k8s.io/utils/integer
 k8s.io/utils/trace
 # knative.dev/client v0.13.0
 knative.dev/client/pkg/dynamic
+knative.dev/client/pkg/dynamic/fake
 knative.dev/client/pkg/errors
 knative.dev/client/pkg/eventing/v1alpha1
 knative.dev/client/pkg/kn/commands
@@ -491,6 +492,7 @@ knative.dev/eventing-contrib/kafka/source/pkg/apis/sources
 knative.dev/eventing-contrib/kafka/source/pkg/apis/sources/v1alpha1
 knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned/scheme
 knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned/typed/sources/v1alpha1
+knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned/typed/sources/v1alpha1/fake
 # knative.dev/pkg v0.0.0-20200314000429-7cbd0bcc1a30
 knative.dev/pkg/apis
 knative.dev/pkg/apis/duck

@@ -16,6 +16,7 @@ package kafka
 
 import (
 	"github.com/spf13/cobra"
+	"k8s.io/client-go/tools/clientcmd"
 
 	"github.com/daisy-ycguo/kn-source-kafka/pkg/kafka/v1alpha1"
 	"knative.dev/client/pkg/kn/commands"
@@ -35,10 +36,20 @@ func NewKafkaCommand(p *commands.KnParams) *cobra.Command {
 	return kafkaCmd
 }
 
+var kafkaSourceClientFactory func(config clientcmd.ClientConfig, namespace string) (v1alpha1.KafkaSourcesClient, error)
+
 func newKafkaSourceClient(p *commands.KnParams, cmd *cobra.Command) (v1alpha1.KafkaSourcesClient, error) {
 	namespace, err := p.GetNamespace(cmd)
 	if err != nil {
 		return nil, err
+	}
+
+	if kafkaSourceClientFactory != nil {
+		config, err := p.GetClientConfig()
+		if err != nil {
+			return nil, err
+		}
+		return kafkaSourceClientFactory(config, namespace)
 	}
 
 	clientConfig, err := p.RestConfig()
