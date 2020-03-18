@@ -17,14 +17,52 @@ package kafka
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/daisy-ycguo/kn-source-kafka/pkg/commands"
+	"github.com/daisy-ycguo/kn-source-kafka/pkg/kafka/v1alpha1"
+	"knative.dev/client/pkg/kn/commands"
+	clientv1alpha1 "knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned/typed/sources/v1alpha1"
+
+	corev1 "k8s.io/api/core/v1"
+	v1 "knative.dev/pkg/apis/duck/v1"
+	"knative.dev/pkg/apis/duck/v1beta1"
 )
 
 // NewKafkaCommand for managing ApiServer source
-func NewKafkaCommand(p *commands.KnSourceParams) *cobra.Command {
+func NewKafkaCommand(p *commands.KnParams) *cobra.Command {
 	kafkaCmd := &cobra.Command{
 		Use:   "kafka",
 		Short: "Kafka Source command group",
 	}
 	return kafkaCmd
+}
+
+func newKafkaSourceClient(p *commands.KnParams, cmd *cobra.Command) (v1alpha1.KafkaSourcesClient, error) {
+	namespace, err := p.GetNamespace(cmd)
+	if err != nil {
+		return nil, err
+	}
+
+	clientConfig, err := p.RestConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := clientv1alpha1.NewForConfig(clientConfig)
+	if err != nil {
+		return nil, err
+	}
+
+	return v1alpha1.NewSourcesClient(client, namespace).KafkaSourcesClient(), nil
+}
+
+func toDuckV1Beta1(destination *v1.Destination) *v1beta1.Destination {
+	r := destination.Ref
+	return &v1beta1.Destination{
+		Ref: &corev1.ObjectReference{
+			Kind:       r.Kind,
+			Namespace:  r.Namespace,
+			Name:       r.Name,
+			APIVersion: r.APIVersion,
+		},
+		URI: destination.URI,
+	}
 }

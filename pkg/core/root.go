@@ -15,16 +15,16 @@
 package core
 
 import (
-	"github.com/daisy-ycguo/kn-source-kafka/pkg/commands"
 	"github.com/daisy-ycguo/kn-source-kafka/pkg/commands/kafka"
+	"knative.dev/client/pkg/kn/commands"
 
 	"github.com/spf13/cobra"
 )
 
 // NewKnSourceCommand creates the rootCmd which is the base command when called without any subcommands
-func NewKnSourceCommand(params ...commands.KnSourceParams) *cobra.Command {
-	var p *commands.KnSourceParams
-	p = &commands.KnSourceParams{}
+func NewKnSourceCommand(params ...commands.KnParams) *cobra.Command {
+	var p *commands.KnParams
+	p = &commands.KnParams{}
 
 	rootCmd := &cobra.Command{
 		Use:   "source",
