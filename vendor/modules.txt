@@ -78,6 +78,12 @@ github.com/magiconair/properties
 github.com/mailru/easyjson/buffer
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
+# github.com/maximilien/kn-source-pkg v0.1.0 => /Users/Daisy/go/src/github.com/maximilien/kn-source-pkg
+github.com/maximilien/kn-source-pkg/pkg/client
+github.com/maximilien/kn-source-pkg/pkg/commands/source
+github.com/maximilien/kn-source-pkg/pkg/core
+github.com/maximilien/kn-source-pkg/pkg/factories
+github.com/maximilien/kn-source-pkg/pkg/types
 # github.com/mitchellh/mapstructure v1.1.2
 github.com/mitchellh/mapstructure
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
@@ -97,7 +103,7 @@ github.com/spf13/afero
 github.com/spf13/afero/mem
 # github.com/spf13/cast v1.3.0
 github.com/spf13/cast
-# github.com/spf13/cobra v0.0.5 => github.com/chmouel/cobra v0.0.0-20191021105835-a78788917390
+# github.com/spf13/cobra v0.0.6 => github.com/chmouel/cobra v0.0.0-20191021105835-a78788917390
 github.com/spf13/cobra
 # github.com/spf13/jwalterweatherman v1.0.0
 github.com/spf13/jwalterweatherman
@@ -444,9 +450,8 @@ k8s.io/kube-openapi/pkg/util/proto
 k8s.io/utils/buffer
 k8s.io/utils/integer
 k8s.io/utils/trace
-# knative.dev/client v0.13.0
+# knative.dev/client v0.13.0 => /Users/Daisy/go/src/knative.dev/client
 knative.dev/client/pkg/dynamic
-knative.dev/client/pkg/dynamic/fake
 knative.dev/client/pkg/errors
 knative.dev/client/pkg/eventing/v1alpha1
 knative.dev/client/pkg/kn/commands
@@ -487,12 +492,11 @@ knative.dev/eventing/pkg/client/clientset/versioned/typed/eventing/v1alpha1/fake
 knative.dev/eventing/pkg/client/clientset/versioned/typed/sources/v1alpha2
 knative.dev/eventing/pkg/client/clientset/versioned/typed/sources/v1alpha2/fake
 knative.dev/eventing/pkg/logging
-# knative.dev/eventing-contrib v0.13.1
+# knative.dev/eventing-contrib v0.13.2
 knative.dev/eventing-contrib/kafka/source/pkg/apis/sources
 knative.dev/eventing-contrib/kafka/source/pkg/apis/sources/v1alpha1
 knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned/scheme
 knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned/typed/sources/v1alpha1
-knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned/typed/sources/v1alpha1/fake
 # knative.dev/pkg v0.0.0-20200314000429-7cbd0bcc1a30
 knative.dev/pkg/apis
 knative.dev/pkg/apis/duck
@@ -523,7 +527,7 @@ knative.dev/serving/pkg/autoscaler/config
 knative.dev/serving/pkg/client/clientset/versioned/scheme
 knative.dev/serving/pkg/client/clientset/versioned/typed/serving/v1
 knative.dev/serving/pkg/client/clientset/versioned/typed/serving/v1/fake
-# knative.dev/test-infra v0.0.0-20200229011351-4dac123b9a3d
+# knative.dev/test-infra v0.0.0-20200320200209-0bc1e8bb1582
 knative.dev/test-infra/scripts
 # sigs.k8s.io/kustomize v2.0.3+incompatible
 sigs.k8s.io/kustomize/pkg/commands/build
