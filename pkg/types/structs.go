@@ -16,21 +16,11 @@ package types
 
 import (
 	sourcetypes "github.com/maximilien/kn-source-pkg/pkg/types"
-	flag "github.com/spf13/pflag"
-	"knative.dev/client/pkg/kn/commands/flags"
 )
 
 type KafkaSourceParams struct {
 	KnSourceParams   *sourcetypes.KnSourceParams
-	SinkFlag         flags.SinkFlags
 	BootstrapServers string
 	Topics           string
 	ConsumerGroup    string
-}
-
-func (p *KafkaSourceParams) AddFlags(flagset *flag.FlagSet) {
-	p.SinkFlag.Add(flagset)
-	flagset.StringVar(&p.BootstrapServers, "servers", "", "Kafka bootstrap servers that the consumer will connect to, consist of a hostname plus a port pair, e.g. my-kafka-bootstrap.kafka:9092")
-	flagset.StringVar(&p.Topics, "topics", "", "Topics to consume messages from")
-	flagset.StringVar(&p.ConsumerGroup, "consumergroup", "", "the consumer group ID")
 }

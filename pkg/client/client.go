@@ -23,24 +23,24 @@ import (
 )
 
 type kafkaSourceClient struct {
-	kafkaSourceParamsFactory types.KafkaSourceParamsFactory
-	client                   clientv1alpha1.KafkaSourceInterface
-	namespace                string
+	kafkaSourceParams *types.KafkaSourceParams
+	client            clientv1alpha1.KafkaSourceInterface
+	namespace         string
 }
 
-func NewKafkaSourceClient(kafkaSourceParamsFactory types.KafkaSourceParamsFactory, ns string) types.KafkaSourceClient {
+func NewKafkaSourceClient(kafkaParams *types.KafkaSourceParams, ns string) types.KafkaSourceClient {
 	return &kafkaSourceClient{
-		kafkaSourceParamsFactory: kafkaSourceParamsFactory,
-		namespace:                ns,
+		kafkaSourceParams: kafkaParams,
+		namespace:         ns,
 	}
 }
 
 func (client *kafkaSourceClient) KnSourceParams() *sourcetypes.KnSourceParams {
-	return client.kafkaSourceParamsFactory.KnSourceParams()
+	return client.kafkaSourceParams.KnSourceParams
 }
 
 func (client *kafkaSourceClient) KafkaSourceParams() *types.KafkaSourceParams {
-	return client.kafkaSourceParamsFactory.KafkaSourceParams()
+	return client.kafkaSourceParams
 }
 
 //CreateKafkaSource is used to create an instance of ApiServerSource

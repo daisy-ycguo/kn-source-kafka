@@ -32,11 +32,11 @@ type kafkaSourceRunEFactory struct {
 	basicfactories.DefautRunEFactory
 	kafkaSourceParams  *types.KafkaSourceParams
 	kafkaSourceClient  types.KafkaSourceClient
-	kafkaClientFactory types.KafkaSourceClientFactory
+	kafkaClientFactory types.KafkaSourceFactory
 }
 
 func NewKafkaSourceRunEFactory(kafkaSrcParams *types.KafkaSourceParams,
-	kafkaSourceClientFactory types.KafkaSourceClientFactory) types.KafkaSourceRunEFactory {
+	kafkaSourceClientFactory types.KafkaSourceFactory) types.KafkaSourceRunEFactory {
 	return &kafkaSourceRunEFactory{
 		kafkaSourceParams:  kafkaSrcParams,
 		kafkaClientFactory: kafkaSourceClientFactory,
@@ -48,7 +48,7 @@ func (f *kafkaSourceRunEFactory) KafkaSourceParams() *types.KafkaSourceParams {
 	return f.kafkaSourceParams
 }
 
-func (f *kafkaSourceRunEFactory) KafkaSourceClientFactory() types.KafkaSourceClientFactory {
+func (f *kafkaSourceRunEFactory) KafkaSourceFactory() types.KafkaSourceFactory {
 	return f.kafkaClientFactory
 }
 
@@ -78,7 +78,7 @@ func (f *kafkaSourceRunEFactory) CreateRunE() sourcetypes.RunE {
 		if err != nil {
 			return err
 		}
-		objectRef, err := f.kafkaSourceParams.SinkFlag.ResolveSink(dynamicClient, f.kafkaSourceClient.Namespace())
+		objectRef, err := f.KnSourceParams().SinkFlag.ResolveSink(dynamicClient, f.kafkaSourceClient.Namespace())
 		if err != nil {
 			return fmt.Errorf(
 				"cannot create Kafka '%s' in namespace '%s' "+

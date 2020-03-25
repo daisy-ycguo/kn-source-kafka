@@ -23,18 +23,20 @@ type knSourceClient struct {
 	namespace      string
 }
 
-func NewKnSourceClient(knSourceParams *types.KnSourceParams, ns string) types.KnSourceClient {
+// NewKnSourceClient creates a new KnSourceClient with parameters and namespace
+func NewKnSourceClient(knSourceParams *types.KnSourceParams, namespace string) types.KnSourceClient {
 	return &knSourceClient{
 		knSourceParams: knSourceParams,
-		namespace:      ns,
+		namespace:      namespace,
 	}
 }
 
+// KnSourceParams returns the client's KnSourceParams
 func (client *knSourceClient) KnSourceParams() *types.KnSourceParams {
 	return client.knSourceParams
 }
 
-// Return the client's namespace
+// Namespace returns the client's namespace
 func (client *knSourceClient) Namespace() string {
 	return client.namespace
 }

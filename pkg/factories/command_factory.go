@@ -24,23 +24,23 @@ import (
 )
 
 type kafkaSourceCommandFactory struct {
-	kafkaSourceParamsFactory types.KafkaSourceParamsFactory
-	defaultCommandFactory    sourcetypes.CommandFactory
+	kafkaSourceParams     *types.KafkaSourceParams
+	defaultCommandFactory sourcetypes.CommandFactory
 }
 
-func NewKafkaSourceCommandFactory(kafkaParamsFactory types.KafkaSourceParamsFactory) types.KafkaSourceCommandFactory {
+func NewKafkaSourceCommandFactory(kafkaParams *types.KafkaSourceParams) types.KafkaSourceCommandFactory {
 	return &kafkaSourceCommandFactory{
-		kafkaSourceParamsFactory: kafkaParamsFactory,
-		defaultCommandFactory:    sourcefactories.NewDefaultCommandFactory(kafkaParamsFactory.KnSourceParams()),
+		kafkaSourceParams:     kafkaParams,
+		defaultCommandFactory: sourcefactories.NewDefaultCommandFactory(kafkaParams.KnSourceParams),
 	}
 }
 
 func (f *kafkaSourceCommandFactory) KafkaSourceParams() *types.KafkaSourceParams {
-	return f.kafkaSourceParamsFactory.KafkaSourceParams()
+	return f.kafkaSourceParams
 }
 
 func (f *kafkaSourceCommandFactory) KnSourceParams() *sourcetypes.KnSourceParams {
-	return f.kafkaSourceParamsFactory.KnSourceParams()
+	return f.kafkaSourceParams.KnSourceParams
 }
 
 func (f *kafkaSourceCommandFactory) SourceCommand() *cobra.Command {

@@ -16,9 +16,9 @@ package factories
 
 import (
 	"github.com/maximilien/kn-source-pkg/pkg/types"
+	"knative.dev/client/pkg/kn/commands"
 
 	"github.com/spf13/pflag"
-	"knative.dev/client/pkg/kn/commands"
 )
 
 type DefautFlagsFactory struct {
@@ -37,19 +37,31 @@ func (f *DefautFlagsFactory) KnSourceParams() *types.KnSourceParams {
 
 func (f *DefautFlagsFactory) CreateFlags() *pflag.FlagSet {
 	flagSet := pflag.NewFlagSet("create", pflag.ExitOnError)
-	commands.AddNamespaceFlags(flagSet, false)
-	f.knSourceParams.AddFlags(flagSet)
+	f.addNamespaceFlag(flagSet)
 	return flagSet
 }
 
 func (f *DefautFlagsFactory) DeleteFlags() *pflag.FlagSet {
-	return pflag.NewFlagSet("delete", pflag.ExitOnError)
+	flagSet := pflag.NewFlagSet("delete", pflag.ExitOnError)
+	f.addNamespaceFlag(flagSet)
+	return flagSet
 }
 
 func (f *DefautFlagsFactory) UpdateFlags() *pflag.FlagSet {
-	return pflag.NewFlagSet("create", pflag.ExitOnError)
+	flagSet := pflag.NewFlagSet("update", pflag.ExitOnError)
+	f.addNamespaceFlag(flagSet)
+	return flagSet
 }
 
 func (f *DefautFlagsFactory) DescribeFlags() *pflag.FlagSet {
-	return pflag.NewFlagSet("create", pflag.ExitOnError)
+	flagSet := pflag.NewFlagSet("describe", pflag.ExitOnError)
+	f.addNamespaceFlag(flagSet)
+	return flagSet
+}
+
+// Private
+
+func (f *DefautFlagsFactory) addNamespaceFlag(flagSet *pflag.FlagSet) {
+	commands.AddNamespaceFlags(flagSet, false)
+	f.knSourceParams.AddFlags(flagSet)
 }

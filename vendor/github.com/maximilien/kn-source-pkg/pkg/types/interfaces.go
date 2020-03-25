@@ -30,14 +30,10 @@ type KnSourceClient interface {
 	Namespace() string
 }
 
-type ParamsFactory interface {
+type KnSourceFactory interface {
 	KnSource
+
 	CreateKnSourceParams() *KnSourceParams
-}
-
-type ClientFactory interface {
-	KnSource
-
 	CreateKnSourceClient(namespace string) KnSourceClient
 }
 
@@ -69,5 +65,6 @@ type RunEFactory interface {
 	UpdateRunE() RunE
 	DescribeRunE() RunE
 
-	KnSourceClientFactory() ClientFactory
+	KnSourceFactory() KnSourceFactory
+	KnSourceClient(cmd *cobra.Command) (KnSourceClient, error)
 }

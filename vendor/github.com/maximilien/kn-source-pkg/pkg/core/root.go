@@ -25,8 +25,6 @@ func NewKnSourceCommand(knSourceParams *types.KnSourceParams,
 	commandFactory types.CommandFactory,
 	flagsFactory types.FlagsFactory,
 	runEFactory types.RunEFactory) *cobra.Command {
-	params := &types.KnSourceParams{}
-
 	rootCmd := commandFactory.SourceCommand()
 
 	// Disable docs header
@@ -38,8 +36,8 @@ func NewKnSourceCommand(knSourceParams *types.KnSourceParams,
 	// Prevents Cobra from dealing with errors as we deal with them in main.go
 	rootCmd.SilenceErrors = true
 
-	if params.Output != nil {
-		rootCmd.SetOutput(params.Output)
+	if knSourceParams.Output != nil {
+		rootCmd.SetOutput(knSourceParams.Output)
 	}
 
 	//TODO: add common source commands flags here

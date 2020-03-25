@@ -30,17 +30,12 @@ type KafkaSourceClient interface {
 	CreateKafkaSource(kafkaSource *v1alpha1.KafkaSource) error
 }
 
-type KafkaSourceParamsFactory interface {
+type KafkaSourceFactory interface {
 	KafkaSource
-	sourcetypes.ParamsFactory
-	CreateKafkaSourceParams() *KafkaSourceParams
-}
-
-type KafkaSourceClientFactory interface {
-	KafkaSource
-	sourcetypes.ClientFactory
+	sourcetypes.KnSourceFactory
 
 	CreateKafkaSourceClient(namespace string) KafkaSourceClient
+	CreateKafkaSourceParams() *KafkaSourceParams
 }
 
 type KafkaSourceCommandFactory interface {
@@ -57,5 +52,5 @@ type KafkaSourceRunEFactory interface {
 	KafkaSource
 	sourcetypes.RunEFactory
 
-	KafkaSourceClientFactory() KafkaSourceClientFactory
+	KafkaSourceFactory() KafkaSourceFactory
 }

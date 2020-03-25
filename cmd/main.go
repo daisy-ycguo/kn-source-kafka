@@ -23,16 +23,14 @@ import (
 )
 
 func main() {
-	kafkaParamsFactory := factories.NewKafkaSourceParamsFactory()
-	kafkaSourceParams := kafkaParamsFactory.CreateKafkaSourceParams()
-	knSourceParams := kafkaParamsFactory.KnSourceParams()
+	kafkaSourceFactory := factories.NewKafkaSourceFactory()
+	kafkaSourceParams := kafkaSourceFactory.CreateKafkaSourceParams()
 
-	kafkaClientFactory := factories.NewKafkaSourceClientFactory(kafkaParamsFactory)
-	kafkaCommandFactory := factories.NewKafkaSourceCommandFactory(kafkaParamsFactory)
-	kafkaFlagsFactory := factories.NewKafkaSourceFlagsFactory(kafkaParamsFactory)
-	kafkaRunEFactory := factories.NewKafkaSourceRunEFactory(kafkaSourceParams, kafkaClientFactory)
+	kafkaCommandFactory := factories.NewKafkaSourceCommandFactory(kafkaSourceParams)
+	kafkaFlagsFactory := factories.NewKafkaSourceFlagsFactory(kafkaSourceParams)
+	kafkaRunEFactory := factories.NewKafkaSourceRunEFactory(kafkaSourceParams, kafkaSourceFactory)
 
-	err := core.NewKnSourceCommand(knSourceParams, kafkaCommandFactory, kafkaFlagsFactory, kafkaRunEFactory).Execute()
+	err := core.NewKnSourceCommand(kafkaSourceFactory.KnSourceParams(), kafkaCommandFactory, kafkaFlagsFactory, kafkaRunEFactory).Execute()
 	if err != nil {
 		if err.Error() != "subcommand is required" {
 			fmt.Fprintln(os.Stderr, err)

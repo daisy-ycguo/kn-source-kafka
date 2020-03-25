@@ -24,27 +24,30 @@ import (
 )
 
 type kafkaSourceFlagsFactory struct {
-	kafkaSourceParamsFactory types.KafkaSourceParamsFactory
+	kafkaSourceParams *types.KafkaSourceParams
 }
 
-func NewKafkaSourceFlagsFactory(kafkaParamsFactory types.KafkaSourceParamsFactory) sourcetypes.FlagsFactory {
+func NewKafkaSourceFlagsFactory(kafkaParams *types.KafkaSourceParams) sourcetypes.FlagsFactory {
 	return &kafkaSourceFlagsFactory{
-		kafkaSourceParamsFactory: kafkaParamsFactory,
+		kafkaSourceParams: kafkaParams,
 	}
 }
 
 func (f *kafkaSourceFlagsFactory) KafkaSourceParams() *types.KafkaSourceParams {
-	return f.kafkaSourceParamsFactory.KafkaSourceParams()
+	return f.kafkaSourceParams
 }
 
 func (f *kafkaSourceFlagsFactory) KnSourceParams() *sourcetypes.KnSourceParams {
-	return f.kafkaSourceParamsFactory.KnSourceParams()
+	return f.kafkaSourceParams.KnSourceParams
 }
 
 func (f *kafkaSourceFlagsFactory) CreateFlags() *pflag.FlagSet {
 	flagSet := pflag.NewFlagSet("create", pflag.ExitOnError)
+	flagSet.StringVar(&f.kafkaSourceParams.BootstrapServers, "servers", "", "Kafka bootstrap servers that the consumer will connect to, consist of a hostname plus a port pair, e.g. my-kafka-bootstrap.kafka:9092")
+	flagSet.StringVar(&f.kafkaSourceParams.Topics, "topics", "", "Topics to consume messages from")
+	flagSet.StringVar(&f.kafkaSourceParams.ConsumerGroup, "consumergroup", "", "the consumer group ID")
 	commands.AddNamespaceFlags(flagSet, false)
-	f.KafkaSourceParams().AddFlags(flagSet)
+	f.kafkaSourceParams.KnSourceParams.SinkFlag.Add(flagSet)
 	return flagSet
 }
 
