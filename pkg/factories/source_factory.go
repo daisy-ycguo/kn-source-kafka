@@ -86,7 +86,7 @@ func (f *kafkaClientFactory) CreateKnSourceClient(namespace string) sourcetypes.
 
 func (f *kafkaClientFactory) initKafkaSourceClient(namespace string) {
 	if f.kafkaSourceClient == nil {
-		f.kafkaSourceClient = client.NewKafkaSourceClient(f.KafkaSourceParams(), namespace)
+		f.kafkaSourceClient = client.NewKafkaSourceClient(f.KafkaSourceParams(), nil, namespace)
 	}
 }
 

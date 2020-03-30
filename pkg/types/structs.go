@@ -16,6 +16,7 @@ package types
 
 import (
 	sourcetypes "github.com/maximilien/kn-source-pkg/pkg/types"
+	clientv1alpha1 "knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned/typed/sources/v1alpha1"
 )
 
 type KafkaSourceParams struct {
@@ -23,4 +24,14 @@ type KafkaSourceParams struct {
 	BootstrapServers string
 	Topics           string
 	ConsumerGroup    string
+}
+
+func (p *KafkaSourceParams) NewSourcesClient() (*clientv1alpha1.SourcesV1alpha1Client, error) {
+	restConfig, err := p.KnSourceParams.RestConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	c, _ := clientv1alpha1.NewForConfig(restConfig)
+	return c, nil
 }
