@@ -17,45 +17,84 @@ package factories
 import (
 	"github.com/daisy-ycguo/kn-source-kafka/pkg/client"
 	"github.com/daisy-ycguo/kn-source-kafka/pkg/types"
+	sourcefactories "github.com/maximilien/kn-source-pkg/pkg/factories"
 	sourcetypes "github.com/maximilien/kn-source-pkg/pkg/types"
 )
 
 type kafkaClientFactory struct {
 	kafkaSourceParams *types.KafkaSourceParams
+	kafkaSourceClient types.KafkaSourceClient
+
+	knSourceFactory sourcetypes.KnSourceFactory
 }
 
 func NewKafkaSourceFactory() types.KafkaSourceFactory {
-	return &kafkaClientFactory{}
+	return &kafkaClientFactory{
+		kafkaSourceParams: nil,
+		kafkaSourceClient: nil,
+		knSourceFactory:   sourcefactories.NewDefaultKnSourceFactory(),
+	}
 }
 
 func (f *kafkaClientFactory) CreateKafkaSourceClient(namespace string) types.KafkaSourceClient {
-	return client.NewKafkaSourceClient(f.kafkaSourceParams, namespace)
+	if f.kafkaSourceClient == nil {
+		f.initKafkaSourceClient(namespace)
+	}
+	return f.kafkaSourceClient
 }
 
 func (f *kafkaClientFactory) KafkaSourceParams() *types.KafkaSourceParams {
 	if f.kafkaSourceParams == nil {
-		f.kafkaSourceParams = f.CreateKafkaSourceParams()
+		f.initKafkaSourceParams()
 	}
 
 	return f.kafkaSourceParams
 }
 
+func (f *kafkaClientFactory) KafkaSourceClient() types.KafkaSourceClient {
+	return f.kafkaSourceClient
+}
+
 func (f *kafkaClientFactory) CreateKafkaSourceParams() *types.KafkaSourceParams {
-	f.kafkaSourceParams = &types.KafkaSourceParams{}
-	f.kafkaSourceParams.KnSourceParams = &sourcetypes.KnSourceParams{}
-	f.kafkaSourceParams.KnSourceParams.Initialize()
+	if f.kafkaSourceParams == nil {
+		f.initKafkaSourceParams()
+	}
+
 	return f.kafkaSourceParams
 }
 
 //KnSources
 func (f *kafkaClientFactory) KnSourceParams() *sourcetypes.KnSourceParams {
-	return f.KafkaSourceParams().KnSourceParams
+	if f.kafkaSourceParams == nil {
+		f.initKafkaSourceParams()
+	}
+	return f.kafkaSourceParams.KnSourceParams
 }
 
 func (f *kafkaClientFactory) CreateKnSourceParams() *sourcetypes.KnSourceParams {
-	return f.KafkaSourceParams().KnSourceParams
+	if f.kafkaSourceParams == nil {
+		f.initKafkaSourceParams()
+	}
+	return f.kafkaSourceParams.KnSourceParams
 }
 
 func (f *kafkaClientFactory) CreateKnSourceClient(namespace string) sourcetypes.KnSourceClient {
-	return f.CreateKafkaSourceClient(namespace).(sourcetypes.KnSourceClient)
+	return f.CreateKafkaSourceClient(namespace)
+}
+
+// Private
+
+func (f *kafkaClientFactory) initKafkaSourceClient(namespace string) {
+	if f.kafkaSourceClient == nil {
+		f.kafkaSourceClient = client.NewKafkaSourceClient(f.KafkaSourceParams(), namespace)
+	}
+}
+
+// Private
+
+func (f *kafkaClientFactory) initKafkaSourceParams() {
+	f.kafkaSourceParams = &types.KafkaSourceParams{
+		KnSourceParams: f.knSourceFactory.CreateKnSourceParams(),
+	}
+	f.kafkaSourceParams.KnSourceParams.Initialize()
 }

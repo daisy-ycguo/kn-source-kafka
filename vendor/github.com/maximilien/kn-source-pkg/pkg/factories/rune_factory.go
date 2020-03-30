@@ -1,4 +1,4 @@
-// Copyright © 2018 The Knative Authors
+// Copyright © 2020 The Knative Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,19 +23,13 @@ import (
 )
 
 type DefautRunEFactory struct {
-	knSourceParams  *types.KnSourceParams
 	knSourceFactory types.KnSourceFactory
 }
 
-func NewDefaultRunEFactory(knSourceParams *types.KnSourceParams, knSourceFactory types.KnSourceFactory) types.RunEFactory {
+func NewDefaultRunEFactory(knSourceFactory types.KnSourceFactory) types.RunEFactory {
 	return &DefautRunEFactory{
-		knSourceParams:  knSourceParams,
 		knSourceFactory: knSourceFactory,
 	}
-}
-
-func (f *DefautRunEFactory) KnSourceParams() *types.KnSourceParams {
-	return f.knSourceParams
 }
 
 func (f *DefautRunEFactory) KnSourceFactory() types.KnSourceFactory {
@@ -43,7 +37,7 @@ func (f *DefautRunEFactory) KnSourceFactory() types.KnSourceFactory {
 }
 
 func (f *DefautRunEFactory) KnSourceClient(cmd *cobra.Command) (types.KnSourceClient, error) {
-	knParams := f.KnSourceParams().KnParams
+	knParams := f.knSourceFactory.KnSourceParams().KnParams
 	namespace, err := knParams.GetNamespace(cmd)
 	if err != nil {
 		return nil, err

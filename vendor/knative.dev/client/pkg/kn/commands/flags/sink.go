@@ -18,14 +18,12 @@ import (
 	"fmt"
 	"strings"
 
-	flag "github.com/spf13/pflag"
+	"github.com/spf13/cobra"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"knative.dev/pkg/apis"
 	duckv1 "knative.dev/pkg/apis/duck/v1"
-	duckv1beta1 "knative.dev/pkg/apis/duck/v1beta1"
 
-	corev1 "k8s.io/api/core/v1"
 	clientdynamic "knative.dev/client/pkg/dynamic"
 	"knative.dev/client/pkg/kn/commands"
 )
@@ -34,8 +32,8 @@ type SinkFlags struct {
 	sink string
 }
 
-func (i *SinkFlags) Add(flagset *flag.FlagSet) {
-	flagset.StringVarP(&i.sink, "sink", "s", "", "Addressable sink for events")
+func (i *SinkFlags) Add(cmd *cobra.Command) {
+	cmd.Flags().StringVarP(&i.sink, "sink", "s", "", "Addressable sink for events")
 }
 
 // SinkPrefixes maps prefixes used for sinks to their GroupVersionResources.
@@ -133,18 +131,4 @@ func SinkToString(sink duckv1.Destination) string {
 		return sink.URI.String()
 	}
 	return ""
-}
-
-// SinkToDuckV1Beta1 converts a Destination from duckv1 to duckv1beta1
-func SinkToDuckV1Beta1(destination *duckv1.Destination) *duckv1beta1.Destination {
-	r := destination.Ref
-	return &duckv1beta1.Destination{
-		Ref: &corev1.ObjectReference{
-			Kind:       r.Kind,
-			Namespace:  r.Namespace,
-			Name:       r.Name,
-			APIVersion: r.APIVersion,
-		},
-		URI: destination.URI,
-	}
 }

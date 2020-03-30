@@ -1,4 +1,4 @@
-// Copyright © 2018 The Knative Authors
+// Copyright © 2020 The Knative Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,17 +15,18 @@
 package types
 
 import (
-	flag "github.com/spf13/pflag"
+	"github.com/spf13/cobra"
 	"knative.dev/client/pkg/kn/commands"
 	"knative.dev/client/pkg/kn/commands/flags"
 )
 
 type KnSourceParams struct {
 	commands.KnParams
+
 	SinkFlag flags.SinkFlags
 }
 
-func (p *KnSourceParams) AddFlags(flagset *flag.FlagSet) {
-	// TODO to add SinkFlag
-	// p.SinkFlag.Add(flagset)
+func (p *KnSourceParams) AddCommonFlags(cmd *cobra.Command) {
+	p.SinkFlag.Add(cmd)
+	commands.AddNamespaceFlags(cmd.Flags(), true)
 }

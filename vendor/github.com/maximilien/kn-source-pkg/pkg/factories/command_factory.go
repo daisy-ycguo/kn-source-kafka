@@ -1,4 +1,4 @@
-// Copyright © 2018 The Knative Authors
+// Copyright © 2020 The Knative Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,35 +22,35 @@ import (
 )
 
 type DefautCommandFactory struct {
-	knSourceParams *types.KnSourceParams
+	knSourceFactory types.KnSourceFactory
 }
 
-func NewDefaultCommandFactory(knSourceParams *types.KnSourceParams) types.CommandFactory {
+func NewDefaultCommandFactory(knSourceFactory types.KnSourceFactory) types.CommandFactory {
 	return &DefautCommandFactory{
-		knSourceParams: knSourceParams,
+		knSourceFactory: knSourceFactory,
 	}
 }
 
-func (f *DefautCommandFactory) KnSourceParams() *types.KnSourceParams {
-	return f.knSourceParams
+func (f *DefautCommandFactory) KnSourceFactory() types.KnSourceFactory {
+	return f.knSourceFactory
 }
 
 func (f *DefautCommandFactory) SourceCommand() *cobra.Command {
-	return source.NewSourceCommand(f.KnSourceParams())
+	return source.NewSourceCommand(f.knSourceFactory.KnSourceParams())
 }
 
 func (f *DefautCommandFactory) CreateCommand() *cobra.Command {
-	return source.NewCreateCommand(f.KnSourceParams())
+	return source.NewCreateCommand(f.knSourceFactory.KnSourceParams())
 }
 
 func (f *DefautCommandFactory) DeleteCommand() *cobra.Command {
-	return source.NewDeleteCommand(f.KnSourceParams())
+	return source.NewDeleteCommand(f.knSourceFactory.KnSourceParams())
 }
 
 func (f *DefautCommandFactory) UpdateCommand() *cobra.Command {
-	return source.NewUpdateCommand(f.KnSourceParams())
+	return source.NewUpdateCommand(f.knSourceFactory.KnSourceParams())
 }
 
 func (f *DefautCommandFactory) DescribeCommand() *cobra.Command {
-	return source.NewDescribeCommand(f.KnSourceParams())
+	return source.NewDescribeCommand(f.knSourceFactory.KnSourceParams())
 }

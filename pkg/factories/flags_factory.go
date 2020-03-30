@@ -15,8 +15,8 @@
 package factories
 
 import (
+	sourcefactories "github.com/maximilien/kn-source-pkg/pkg/factories"
 	sourcetypes "github.com/maximilien/kn-source-pkg/pkg/types"
-	"knative.dev/client/pkg/kn/commands"
 
 	"github.com/daisy-ycguo/kn-source-kafka/pkg/types"
 
@@ -24,30 +24,38 @@ import (
 )
 
 type kafkaSourceFlagsFactory struct {
-	kafkaSourceParams *types.KafkaSourceParams
+	defaultFlagsFactory sourcetypes.FlagsFactory
+	kafkaSourceFactory  types.KafkaSourceFactory
 }
 
-func NewKafkaSourceFlagsFactory(kafkaParams *types.KafkaSourceParams) sourcetypes.FlagsFactory {
+func NewKafkaSourceFlagsFactory(kafkaFactory types.KafkaSourceFactory) types.KafkaSourceFlagsFactory {
 	return &kafkaSourceFlagsFactory{
-		kafkaSourceParams: kafkaParams,
+		defaultFlagsFactory: sourcefactories.NewDefaultFlagsFactory(kafkaFactory),
+		kafkaSourceFactory:  kafkaFactory,
 	}
 }
 
-func (f *kafkaSourceFlagsFactory) KafkaSourceParams() *types.KafkaSourceParams {
-	return f.kafkaSourceParams
+func (f *kafkaSourceFlagsFactory) KnSourceFactory() sourcetypes.KnSourceFactory {
+	return f.kafkaSourceFactory
 }
 
 func (f *kafkaSourceFlagsFactory) KnSourceParams() *sourcetypes.KnSourceParams {
-	return f.kafkaSourceParams.KnSourceParams
+	return f.kafkaSourceFactory.KnSourceParams()
+}
+
+func (f *kafkaSourceFlagsFactory) KafkaSourceParams() *types.KafkaSourceParams {
+	return f.kafkaSourceFactory.KafkaSourceParams()
+}
+
+func (f *kafkaSourceFlagsFactory) KafkaSourceFactory() types.KafkaSourceFactory {
+	return f.kafkaSourceFactory
 }
 
 func (f *kafkaSourceFlagsFactory) CreateFlags() *pflag.FlagSet {
 	flagSet := pflag.NewFlagSet("create", pflag.ExitOnError)
-	flagSet.StringVar(&f.kafkaSourceParams.BootstrapServers, "servers", "", "Kafka bootstrap servers that the consumer will connect to, consist of a hostname plus a port pair, e.g. my-kafka-bootstrap.kafka:9092")
-	flagSet.StringVar(&f.kafkaSourceParams.Topics, "topics", "", "Topics to consume messages from")
-	flagSet.StringVar(&f.kafkaSourceParams.ConsumerGroup, "consumergroup", "", "the consumer group ID")
-	commands.AddNamespaceFlags(flagSet, false)
-	f.kafkaSourceParams.KnSourceParams.SinkFlag.Add(flagSet)
+	flagSet.StringVar(&f.KafkaSourceParams().BootstrapServers, "servers", "", "Kafka bootstrap servers that the consumer will connect to, consist of a hostname plus a port pair, e.g. my-kafka-bootstrap.kafka:9092")
+	flagSet.StringVar(&f.KafkaSourceParams().Topics, "topics", "", "Topics to consume messages from")
+	flagSet.StringVar(&f.KafkaSourceParams().ConsumerGroup, "consumergroup", "", "the consumer group ID")
 	return flagSet
 }
 

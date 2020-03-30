@@ -24,13 +24,12 @@ import (
 
 func main() {
 	kafkaSourceFactory := factories.NewKafkaSourceFactory()
-	kafkaSourceParams := kafkaSourceFactory.CreateKafkaSourceParams()
 
-	kafkaCommandFactory := factories.NewKafkaSourceCommandFactory(kafkaSourceParams)
-	kafkaFlagsFactory := factories.NewKafkaSourceFlagsFactory(kafkaSourceParams)
-	kafkaRunEFactory := factories.NewKafkaSourceRunEFactory(kafkaSourceParams, kafkaSourceFactory)
+	kafkaCommandFactory := factories.NewKafkaSourceCommandFactory(kafkaSourceFactory)
+	kafkaFlagsFactory := factories.NewKafkaSourceFlagsFactory(kafkaSourceFactory)
+	kafkaRunEFactory := factories.NewKafkaSourceRunEFactory(kafkaSourceFactory)
 
-	err := core.NewKnSourceCommand(kafkaSourceFactory.KnSourceParams(), kafkaCommandFactory, kafkaFlagsFactory, kafkaRunEFactory).Execute()
+	err := core.NewKnSourceCommand(kafkaSourceFactory, kafkaCommandFactory, kafkaFlagsFactory, kafkaRunEFactory).Execute()
 	if err != nil {
 		if err.Error() != "subcommand is required" {
 			fmt.Fprintln(os.Stderr, err)

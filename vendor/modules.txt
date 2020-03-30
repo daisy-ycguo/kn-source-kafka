@@ -43,6 +43,8 @@ github.com/google/go-cmp/cmp/internal/value
 github.com/google/go-containerregistry/pkg/name
 # github.com/google/gofuzz v1.0.0
 github.com/google/gofuzz
+# github.com/google/uuid v1.1.1
+github.com/google/uuid
 # github.com/googleapis/gnostic v0.2.2
 github.com/googleapis/gnostic/OpenAPIv2
 github.com/googleapis/gnostic/compiler
@@ -84,6 +86,7 @@ github.com/maximilien/kn-source-pkg/pkg/commands/source
 github.com/maximilien/kn-source-pkg/pkg/core
 github.com/maximilien/kn-source-pkg/pkg/factories
 github.com/maximilien/kn-source-pkg/pkg/types
+github.com/maximilien/kn-source-pkg/pkg/util
 # github.com/mitchellh/mapstructure v1.1.2
 github.com/mitchellh/mapstructure
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
@@ -464,7 +467,7 @@ knative.dev/client/pkg/sources/v1alpha2
 knative.dev/client/pkg/util
 knative.dev/client/pkg/util/mock
 knative.dev/client/pkg/wait
-# knative.dev/eventing v0.13.3
+# knative.dev/eventing v0.13.4
 knative.dev/eventing/pkg/apis/config
 knative.dev/eventing/pkg/apis/configs
 knative.dev/eventing/pkg/apis/configs/v1alpha1
@@ -497,7 +500,7 @@ knative.dev/eventing-contrib/kafka/source/pkg/apis/sources
 knative.dev/eventing-contrib/kafka/source/pkg/apis/sources/v1alpha1
 knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned/scheme
 knative.dev/eventing-contrib/kafka/source/pkg/client/clientset/versioned/typed/sources/v1alpha1
-# knative.dev/pkg v0.0.0-20200314000429-7cbd0bcc1a30
+# knative.dev/pkg v0.0.0-20200323231609-0840da9555a3
 knative.dev/pkg/apis
 knative.dev/pkg/apis/duck
 knative.dev/pkg/apis/duck/v1
@@ -513,7 +516,7 @@ knative.dev/pkg/logging/logkey
 knative.dev/pkg/profiling
 knative.dev/pkg/ptr
 knative.dev/pkg/tracker
-# knative.dev/serving v0.13.0
+# knative.dev/serving v0.13.1-0.20200324164309-ce10070bb7ef
 knative.dev/serving/pkg/apis/autoscaling
 knative.dev/serving/pkg/apis/autoscaling/v1alpha1
 knative.dev/serving/pkg/apis/config
@@ -527,7 +530,7 @@ knative.dev/serving/pkg/autoscaler/config
 knative.dev/serving/pkg/client/clientset/versioned/scheme
 knative.dev/serving/pkg/client/clientset/versioned/typed/serving/v1
 knative.dev/serving/pkg/client/clientset/versioned/typed/serving/v1/fake
-# knative.dev/test-infra v0.0.0-20200320200209-0bc1e8bb1582
+# knative.dev/test-infra v0.0.0-20200324183109-d81c66eea4e6
 knative.dev/test-infra/scripts
 # sigs.k8s.io/kustomize v2.0.3+incompatible
 sigs.k8s.io/kustomize/pkg/commands/build

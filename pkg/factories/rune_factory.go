@@ -20,53 +20,57 @@ import (
 
 	"github.com/daisy-ycguo/kn-source-kafka/pkg/client"
 	"github.com/daisy-ycguo/kn-source-kafka/pkg/types"
-	"knative.dev/client/pkg/kn/commands/flags"
 
-	basicfactories "github.com/maximilien/kn-source-pkg/pkg/factories"
 	sourcetypes "github.com/maximilien/kn-source-pkg/pkg/types"
+	"github.com/maximilien/kn-source-pkg/pkg/util"
 
 	"github.com/spf13/cobra"
 )
 
 type kafkaSourceRunEFactory struct {
-	basicfactories.DefautRunEFactory
-	kafkaSourceParams  *types.KafkaSourceParams
 	kafkaSourceClient  types.KafkaSourceClient
-	kafkaClientFactory types.KafkaSourceFactory
+	kafkaSourceFactory types.KafkaSourceFactory
 }
 
-func NewKafkaSourceRunEFactory(kafkaSrcParams *types.KafkaSourceParams,
-	kafkaSourceClientFactory types.KafkaSourceFactory) types.KafkaSourceRunEFactory {
+func NewKafkaSourceRunEFactory(kafkaFactory types.KafkaSourceFactory) types.KafkaSourceRunEFactory {
 	return &kafkaSourceRunEFactory{
-		kafkaSourceParams:  kafkaSrcParams,
-		kafkaClientFactory: kafkaSourceClientFactory,
-		kafkaSourceClient:  nil,
+		kafkaSourceFactory: kafkaFactory,
+		kafkaSourceClient:  kafkaFactory.KafkaSourceClient(),
 	}
 }
 
-func (f *kafkaSourceRunEFactory) KafkaSourceParams() *types.KafkaSourceParams {
-	return f.kafkaSourceParams
+func (f *kafkaSourceRunEFactory) KnSourceParams() *sourcetypes.KnSourceParams {
+	return f.KafkaSourceFactory().KnSourceParams()
+}
+
+func (f *kafkaSourceRunEFactory) KnSourceClient(cmd *cobra.Command) (sourcetypes.KnSourceClient, error) {
+	return f.KafkaSourceFactory().KafkaSourceClient(), nil
+}
+
+func (f *kafkaSourceRunEFactory) KafkaSourceClient(cmd *cobra.Command) (types.KafkaSourceClient, error) {
+	knParams := f.kafkaSourceFactory.KnSourceParams().KnParams
+	namespace, err := knParams.GetNamespace(cmd)
+	if err != nil {
+		return nil, err
+	}
+
+	f.kafkaSourceClient = f.kafkaSourceFactory.CreateKafkaSourceClient(namespace)
+
+	return f.kafkaSourceClient, nil
+}
+
+func (f *kafkaSourceRunEFactory) KnSourceFactory() sourcetypes.KnSourceFactory {
+	return f.kafkaSourceFactory
 }
 
 func (f *kafkaSourceRunEFactory) KafkaSourceFactory() types.KafkaSourceFactory {
-	return f.kafkaClientFactory
-}
-
-func (f *kafkaSourceRunEFactory) KafkaSourceClient(cmd *cobra.Command) error {
-	if f.kafkaSourceClient == nil {
-		p := f.KnSourceParams().KnParams
-		namespace, err := p.GetNamespace(cmd)
-		if err != nil {
-			return err
-		}
-		f.kafkaSourceClient = f.kafkaClientFactory.CreateKafkaSourceClient(namespace)
-	}
-	return nil
+	return f.kafkaSourceFactory
 }
 
 func (f *kafkaSourceRunEFactory) CreateRunE() sourcetypes.RunE {
 	return func(cmd *cobra.Command, args []string) error {
-		f.KafkaSourceClient(cmd)
+		var err error
+		f.kafkaSourceClient, err = f.KafkaSourceClient(cmd)
 		fmt.Printf("%s RunE function called for Kafka source: args: %#v, client: %#v\n", cmd.Name(), args, f.kafkaSourceClient)
 
 		if len(args) != 1 {
@@ -86,10 +90,10 @@ func (f *kafkaSourceRunEFactory) CreateRunE() sourcetypes.RunE {
 		}
 
 		b := client.NewKafkaSourceBuilder(name).
-			BootstrapServers(f.kafkaSourceParams.BootstrapServers).
-			Topics(f.kafkaSourceParams.Topics).
-			ConsumerGroup(f.kafkaSourceParams.ConsumerGroup).
-			Sink(flags.SinkToDuckV1Beta1(objectRef))
+			BootstrapServers(f.kafkaSourceFactory.KafkaSourceParams().BootstrapServers).
+			Topics(f.kafkaSourceFactory.KafkaSourceParams().Topics).
+			ConsumerGroup(f.kafkaSourceFactory.KafkaSourceParams().ConsumerGroup).
+			Sink(util.SinkToDuckV1Beta1(objectRef))
 
 		err = f.kafkaSourceClient.CreateKafkaSource(b.Build())
 

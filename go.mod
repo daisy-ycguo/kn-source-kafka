@@ -6,10 +6,9 @@ require (
 	github.com/spf13/pflag v1.0.5
 	k8s.io/apimachinery v0.17.0
 	knative.dev/client v0.13.0
-	knative.dev/eventing v0.13.3 // indirect
 	knative.dev/eventing-contrib v0.13.2
-	knative.dev/pkg v0.0.0-20200314000429-7cbd0bcc1a30
-	knative.dev/test-infra v0.0.0-20200320200209-0bc1e8bb1582
+	knative.dev/pkg v0.0.0-20200323231609-0840da9555a3
+	knative.dev/test-infra v0.0.0-20200324183109-d81c66eea4e6
 )
 
 // Temporary pinning certain libraries. Please check periodically, whether these are still needed

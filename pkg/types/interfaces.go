@@ -15,42 +15,42 @@
 package types
 
 import (
-	sourcetypes "github.com/maximilien/kn-source-pkg/pkg/types"
+	"github.com/spf13/cobra"
 	v1alpha1 "knative.dev/eventing-contrib/kafka/source/pkg/apis/sources/v1alpha1"
+
+	sourcetypes "github.com/maximilien/kn-source-pkg/pkg/types"
 )
 
-type KafkaSource interface {
-	KafkaSourceParams() *KafkaSourceParams
-}
-
 type KafkaSourceClient interface {
-	KafkaSource
 	sourcetypes.KnSourceClient
-	// Create an KafkaSource by object
 	CreateKafkaSource(kafkaSource *v1alpha1.KafkaSource) error
 }
 
 type KafkaSourceFactory interface {
-	KafkaSource
 	sourcetypes.KnSourceFactory
+
+	KafkaSourceParams() *KafkaSourceParams
+	KafkaSourceClient() KafkaSourceClient
 
 	CreateKafkaSourceClient(namespace string) KafkaSourceClient
 	CreateKafkaSourceParams() *KafkaSourceParams
 }
 
 type KafkaSourceCommandFactory interface {
-	KafkaSource
 	sourcetypes.CommandFactory
+
+	KafkaSourceFactory() KafkaSourceFactory
 }
 
 type KafkaSourceFlagsFactory interface {
-	KafkaSource
 	sourcetypes.FlagsFactory
+
+	KafkaSourceFactory() KafkaSourceFactory
 }
 
 type KafkaSourceRunEFactory interface {
-	KafkaSource
 	sourcetypes.RunEFactory
 
 	KafkaSourceFactory() KafkaSourceFactory
+	KafkaSourceClient(cmd *cobra.Command) (KafkaSourceClient, error)
 }
