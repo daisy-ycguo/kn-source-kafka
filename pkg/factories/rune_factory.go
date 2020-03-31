@@ -47,16 +47,9 @@ func (f *kafkaSourceRunEFactory) KnSourceClient(cmd *cobra.Command) (sourcetypes
 	return f.KafkaSourceFactory().KafkaSourceClient(), nil
 }
 
-func (f *kafkaSourceRunEFactory) KafkaSourceClient(cmd *cobra.Command) (types.KafkaSourceClient, error) {
-	knParams := f.kafkaSourceFactory.KnSourceParams().KnParams
-	namespace, err := knParams.GetNamespace(cmd)
-	if err != nil {
-		return nil, err
-	}
-
+func (f *kafkaSourceRunEFactory) KafkaSourceClient(namespace string) types.KafkaSourceClient {
 	f.kafkaSourceClient = f.kafkaSourceFactory.CreateKafkaSourceClient(namespace)
-
-	return f.kafkaSourceClient, nil
+	return f.kafkaSourceClient
 }
 
 func (f *kafkaSourceRunEFactory) KnSourceFactory() sourcetypes.KnSourceFactory {
@@ -70,7 +63,11 @@ func (f *kafkaSourceRunEFactory) KafkaSourceFactory() types.KafkaSourceFactory {
 func (f *kafkaSourceRunEFactory) CreateRunE() sourcetypes.RunE {
 	return func(cmd *cobra.Command, args []string) error {
 		var err error
-		f.kafkaSourceClient, err = f.KafkaSourceClient(cmd)
+		namespace, err := f.KnSourceParams().GetNamespace(cmd)
+		if err != nil {
+			return err
+		}
+		f.kafkaSourceClient = f.KafkaSourceClient(namespace)
 		fmt.Printf("%s RunE function called for Kafka source: args: %#v, client: %#v\n", cmd.Name(), args, f.kafkaSourceClient)
 
 		if len(args) != 1 {

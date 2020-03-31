@@ -15,7 +15,6 @@
 package types
 
 import (
-	"github.com/spf13/cobra"
 	v1alpha1 "knative.dev/eventing-contrib/kafka/source/pkg/apis/sources/v1alpha1"
 
 	sourcetypes "github.com/maximilien/kn-source-pkg/pkg/types"
@@ -52,5 +51,5 @@ type KafkaSourceRunEFactory interface {
 	sourcetypes.RunEFactory
 
 	KafkaSourceFactory() KafkaSourceFactory
-	KafkaSourceClient(cmd *cobra.Command) (KafkaSourceClient, error)
+	KafkaSourceClient(namespace string) KafkaSourceClient
 }

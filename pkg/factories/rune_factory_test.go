@@ -18,7 +18,6 @@ import (
 	"testing"
 
 	"github.com/daisy-ycguo/kn-source-kafka/pkg/types"
-	"github.com/spf13/cobra"
 	"gotest.tools/assert"
 )
 
@@ -44,12 +43,7 @@ func TestRunEFactory_KafkaSourceFactory(t *testing.T) {
 
 func TestRunEFactory_KafkaSourceClient(t *testing.T) {
 	runEFactory := createKafkaSourceRunEFactory()
-	command := &cobra.Command{}
-	params := runEFactory.KafkaSourceFactory().CreateKafkaSourceParams()
-	params.KnSourceParams.AddCommonFlags(command)
-
-	knSourceClient, err := runEFactory.KafkaSourceClient(command)
-	assert.NilError(t, err)
+	knSourceClient := runEFactory.KafkaSourceClient("fake_namespace")
 	assert.Assert(t, knSourceClient != nil)
 }
 
