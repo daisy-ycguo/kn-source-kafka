@@ -87,7 +87,7 @@ run() {
   go_test
 
   echo "────────────────────────────────────────────"
-  ./kn-source
+  ./kn-source-kafka
 }
 
 
@@ -127,7 +127,7 @@ source_format() {
 
 go_build() {
   echo "🚧 Compile"
-  go build -mod=vendor -ldflags "$(build_flags $(basedir))" -o kn-source ./cmd/...
+  go build -mod=vendor -ldflags "$(build_flags $(basedir))" -o kn-source-kafka ./cmd/...
 }
 
 go_test() {

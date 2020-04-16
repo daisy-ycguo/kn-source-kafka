@@ -452,6 +452,7 @@ k8s.io/utils/buffer
 k8s.io/utils/integer
 k8s.io/utils/trace
 # knative.dev/client v0.13.1-0.20200406212659-8a60d2ebf8e2 => /Users/Daisy/go/src/knative.dev/client
+knative.dev/client/lib/test
 knative.dev/client/pkg/dynamic
 knative.dev/client/pkg/errors
 knative.dev/client/pkg/eventing/v1alpha1

@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+source "$(dirname $0)"/../vendor/knative.dev/test-infra/scripts/e2e-tests.sh
+
 export PATH=$PWD:$PATH
 
 dir=$(dirname "${BASH_SOURCE[0]}")
@@ -67,9 +69,9 @@ function plugin_test_teardown() {
 # Will create and delete this namespace (used for all tests, modify if you want a different one used)
 export KN_E2E_NAMESPACE=kne2etests
 
-echo "🧪  Setup"
-plugin_test_setup
+#echo "🧪  Setup"
+#plugin_test_setup
 echo "🧪  Testing"
-go test ${base}/test/e2e/ -test.v -tags "e2e ${E2E_TAGS}" "$@"
-echo "🧪  Teardown"
-plugin_test_teardown
+go test ${base}/test/e2e/ -timeout=45m -test.v -tags "e2e ${E2E_TAGS}" "$@"
+#echo "🧪  Teardown"
+#plugin_test_teardown

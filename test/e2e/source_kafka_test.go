@@ -22,24 +22,32 @@ import (
 	"path/filepath"
 	"testing"
 
+	testcommon "github.com/maximilien/kn-source-pkg/test/e2e"
 	"gotest.tools/assert"
 	"knative.dev/client/lib/test"
 	"knative.dev/client/pkg/util"
 )
 
-func SourceKafkaTest(t *testing.T) {
+const (
+	kafkaBootstrapUrl     = "my-cluster-kafka-bootstrap.kafka.svc:9092"
+	kafkaClusterName      = "my-cluster"
+	kafkaClusterNamespace = "kafka"
+	kafkaTopic            = "test-topic"
+)
+
+func TestSourceKafka(t *testing.T) {
 	t.Parallel()
 
 	currentDir, err := os.Getwd()
 	assert.NilError(t, err)
 
-	it, err := NewE2ETest("kn-source_kafka", filepath.Join(currentDir, "../.."), false)
+	it, err := testcommon.NewE2ETest("kn-source-kafka", filepath.Join(currentDir, "../.."), false)
 	assert.NilError(t, err)
 	defer func() {
 		assert.NilError(t, it.KnTest().Teardown())
 	}()
 
-	r := test.NewKnRunResultCollector(t)
+	r := test.NewKnRunResultCollector(t, it.KnTest())
 	defer r.DumpIfFailed()
 
 	err = it.KnPlugin().Install()
@@ -48,7 +56,7 @@ func SourceKafkaTest(t *testing.T) {
 	serviceCreate(r, "sinksvc")
 
 	t.Log("kn-source_kafka create 'source-name'")
-	knSourceKafkaCreate(r, "mykafka", "sinksvc")
+	knSourceKafkaCreate(it, r, "mykafka", "sinksvc")
 
 	err = it.KnPlugin().Uninstall()
 	assert.NilError(t, err)
@@ -56,10 +64,10 @@ func SourceKafkaTest(t *testing.T) {
 
 // Private
 
-func knSourceKafkaCreate(r *test.KnRunResultCollector, sourceName, server, topic, string) {
-	out := r.KnTest().KnPlugin().Run("create", sourceName, "--sink", sinkName)
+func knSourceKafkaCreate(it *testcommon.E2ETest, r *test.KnRunResultCollector, sourceName, sinkName string) {
+	out := it.KnPlugin().Run("create", sourceName, "--servers", kafkaBootstrapUrl, "--topics", kafkaTopic, "--consumergroup", "test-consumer-group", "--sink", sinkName)
 	r.AssertNoError(out)
-	assert.Check(t, util.ContainsAllIgnoreCase(out.Stdout, "create", sourceName))
+	assert.Check(r.T(), util.ContainsAllIgnoreCase(out.Stdout, "create", sourceName))
 }
 
 func serviceCreate(r *test.KnRunResultCollector, serviceName string) {
