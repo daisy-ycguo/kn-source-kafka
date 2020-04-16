@@ -7,10 +7,10 @@ require (
 	gotest.tools v2.2.0+incompatible
 	k8s.io/apimachinery v0.17.0
 	k8s.io/client-go v0.17.0
-	knative.dev/client v0.13.0
+	knative.dev/client v0.13.1-0.20200406212659-8a60d2ebf8e2
 	knative.dev/eventing-contrib v0.13.2
-	knative.dev/pkg v0.0.0-20200323231609-0840da9555a3
-	knative.dev/test-infra v0.0.0-20200324183109-d81c66eea4e6
+	knative.dev/pkg v0.0.0-20200409225505-9147309d5366
+	knative.dev/test-infra v0.0.0-20200409221904-5e04d955cdb9
 )
 
 // Temporary pinning certain libraries. Please check periodically, whether these are still needed

@@ -43,8 +43,8 @@ func (f *kafkaSourceRunEFactory) KnSourceParams() *sourcetypes.KnSourceParams {
 	return f.KafkaSourceFactory().KnSourceParams()
 }
 
-func (f *kafkaSourceRunEFactory) KnSourceClient(cmd *cobra.Command) (sourcetypes.KnSourceClient, error) {
-	return f.KafkaSourceFactory().KafkaSourceClient(), nil
+func (f *kafkaSourceRunEFactory) KnSourceClient(namespace string) sourcetypes.KnSourceClient {
+	return f.KafkaSourceFactory().KafkaSourceClient()
 }
 
 func (f *kafkaSourceRunEFactory) KafkaSourceClient(namespace string) types.KafkaSourceClient {

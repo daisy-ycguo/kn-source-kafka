@@ -31,10 +31,6 @@ func NewDefaultCommandFactory(knSourceFactory types.KnSourceFactory) types.Comma
 	}
 }
 
-func (f *DefautCommandFactory) KnSourceFactory() types.KnSourceFactory {
-	return f.knSourceFactory
-}
-
 func (f *DefautCommandFactory) SourceCommand() *cobra.Command {
 	return source.NewSourceCommand(f.knSourceFactory.KnSourceParams())
 }

@@ -27,14 +27,6 @@ func NewDefaultKnSourceFactory() types.KnSourceFactory {
 	return &DefautKnSourceFactory{}
 }
 
-func (f *DefautKnSourceFactory) KnSourceParams() *types.KnSourceParams {
-	if f.knSourceParams == nil {
-		f.knSourceParams = f.CreateKnSourceParams()
-	}
-
-	return f.knSourceParams
-}
-
 func (f *DefautKnSourceFactory) CreateKnSourceParams() *types.KnSourceParams {
 	f.knSourceParams = &types.KnSourceParams{}
 	f.knSourceParams.Initialize()
