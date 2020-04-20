@@ -41,7 +41,7 @@ func TestSourceKafka(t *testing.T) {
 	currentDir, err := os.Getwd()
 	assert.NilError(t, err)
 
-	it, err := testcommon.NewE2ETest("kn-source-kafka", filepath.Join(currentDir, "../.."), false)
+	it, err := testcommon.NewE2ETest("kn-source_kafka", filepath.Join(currentDir, "../.."), false)
 	assert.NilError(t, err)
 	defer func() {
 		assert.NilError(t, it.KnTest().Teardown())
@@ -55,8 +55,8 @@ func TestSourceKafka(t *testing.T) {
 
 	serviceCreate(r, "sinksvc")
 
-	t.Log("kn-source_kafka create 'source-name'")
-	knSourceKafkaCreate(it, r, "mykafka", "sinksvc")
+	t.Log("test kn-source_kafka create source-name")
+	knSourceKafkaCreate(it, r, "mykafka1", "sinksvc")
 
 	err = it.KnPlugin().Uninstall()
 	assert.NilError(t, err)

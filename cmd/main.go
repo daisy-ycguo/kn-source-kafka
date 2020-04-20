@@ -20,6 +20,8 @@ import (
 
 	"github.com/daisy-ycguo/kn-source-kafka/pkg/factories"
 	"github.com/maximilien/kn-source-pkg/pkg/core"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 )
 
 func main() {
