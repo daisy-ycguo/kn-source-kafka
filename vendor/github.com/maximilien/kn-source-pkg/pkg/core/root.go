@@ -42,7 +42,7 @@ func NewKnSourceCommand(knSourceFactory types.KnSourceFactory,
 
 	createCmd := commandFactory.CreateCommand()
 	addCommonFlags(knSourceParams, createCmd)
-	addUpdateFlags(knSourceParams, createCmd)
+	addCreateUpdateFlags(knSourceParams, createCmd)
 	createCmd.Flags().AddFlagSet(flagsFactory.CreateFlags())
 	createCmd.RunE = runEFactory.CreateRunE()
 	rootCmd.AddCommand(createCmd)
@@ -55,7 +55,7 @@ func NewKnSourceCommand(knSourceFactory types.KnSourceFactory,
 
 	updateCmd := commandFactory.UpdateCommand()
 	addCommonFlags(knSourceParams, updateCmd)
-	addUpdateFlags(knSourceParams, updateCmd)
+	addCreateUpdateFlags(knSourceParams, updateCmd)
 	updateCmd.Flags().AddFlagSet(flagsFactory.UpdateFlags())
 	updateCmd.RunE = runEFactory.UpdateRunE()
 	rootCmd.AddCommand(updateCmd)
@@ -78,6 +78,6 @@ func addCommonFlags(knSourceParams *types.KnSourceParams, cmd *cobra.Command) {
 	knSourceParams.AddCommonFlags(cmd)
 }
 
-func addUpdateFlags(knSourceParams *types.KnSourceParams, cmd *cobra.Command) {
-	knSourceParams.AddUpdateFlags(cmd)
+func addCreateUpdateFlags(knSourceParams *types.KnSourceParams, cmd *cobra.Command) {
+	knSourceParams.AddCreateUpdateFlags(cmd)
 }

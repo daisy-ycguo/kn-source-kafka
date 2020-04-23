@@ -18,20 +18,14 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/daisy-ycguo/kn-source-kafka/pkg/factories"
-	"github.com/maximilien/kn-source-pkg/pkg/core"
+	"github.com/daisy-ycguo/kn-source-kafka/pkg/core"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/oidc"
 )
 
 func main() {
-	kafkaSourceFactory := factories.NewKafkaSourceFactory()
 
-	kafkaCommandFactory := factories.NewKafkaSourceCommandFactory(kafkaSourceFactory)
-	kafkaFlagsFactory := factories.NewKafkaSourceFlagsFactory(kafkaSourceFactory)
-	kafkaRunEFactory := factories.NewKafkaSourceRunEFactory(kafkaSourceFactory)
-
-	err := core.NewKnSourceCommand(kafkaSourceFactory, kafkaCommandFactory, kafkaFlagsFactory, kafkaRunEFactory).Execute()
+	err := core.NewKnSourceKafkaCommand().Execute()
 	if err != nil {
 		if err.Error() != "subcommand is required" {
 			fmt.Fprintln(os.Stderr, err)

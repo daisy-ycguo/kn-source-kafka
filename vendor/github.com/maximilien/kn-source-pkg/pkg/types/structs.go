@@ -30,6 +30,6 @@ func (p *KnSourceParams) AddCommonFlags(cmd *cobra.Command) {
 	commands.AddNamespaceFlags(cmd.Flags(), true)
 }
 
-func (p *KnSourceParams) AddUpdateFlags(cmd *cobra.Command) {
+func (p *KnSourceParams) AddCreateUpdateFlags(cmd *cobra.Command) {
 	p.SinkFlag.Add(cmd)
 }
