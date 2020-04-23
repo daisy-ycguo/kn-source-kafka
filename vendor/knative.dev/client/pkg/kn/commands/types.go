@@ -136,10 +136,7 @@ func (params *KnParams) newDynamicClient(namespace string) (clientdynamic.KnDyna
 		return nil, err
 	}
 
-	client, err := dynamic.NewForConfig(restConfig)
-	if err != nil {
-		return nil, err
-	}
+	client, _ := dynamic.NewForConfig(restConfig)
 	return clientdynamic.NewKnDynamicClient(client, namespace), nil
 }
 

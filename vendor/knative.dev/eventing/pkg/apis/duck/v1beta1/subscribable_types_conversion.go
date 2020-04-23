@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Knative Authors
+Copyright 2020 The Knative Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha1
+package v1beta1
 
 import (
 	"context"
+	"fmt"
+
+	"knative.dev/pkg/apis"
 )
 
-func (s *ApiServerSource) SetDefaults(ctx context.Context) {
-	s.Spec.SetDefaults(ctx)
+// ConvertTo implements apis.Convertible
+func (source *Subscribable) ConvertTo(ctx context.Context, sink apis.Convertible) error {
+	return fmt.Errorf("v1beta1 is the highest known version, got: %T", sink)
 }
 
-func (ss *ApiServerSourceSpec) SetDefaults(ctx context.Context) {
-	// TODO anything?
+// ConvertFrom implements apis.Convertible
+func (sink *Subscribable) ConvertFrom(ctx context.Context, source apis.Convertible) error {
+	return fmt.Errorf("v1beta1 is the highest known version, got: %T", source)
 }

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Knative Authors
+Copyright 2020 The Knative Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha1
+package v1alpha2
 
 import (
 	"context"
+	"fmt"
+
+	corev1 "k8s.io/api/core/v1"
+	"knative.dev/pkg/apis"
 )
 
 func (s *ContainerSource) SetDefaults(ctx context.Context) {
-	s.Spec.SetDefaults(ctx)
+	withName := apis.WithinParent(ctx, s.ObjectMeta)
+	s.Spec.SetDefaults(withName)
 }
 
 func (ss *ContainerSourceSpec) SetDefaults(ctx context.Context) {
-	// TODO anything?
+	containers := make([]corev1.Container, 0, len(ss.Template.Spec.Containers))
+	for i, c := range ss.Template.Spec.Containers {
+		// If the Container specified has no name, then default to "<source_name>_<i>".
+		if c.Name == "" {
+			c.Name = fmt.Sprintf("%s-%d", apis.ParentMeta(ctx).Name, i)
+		}
+		containers = append(containers, c)
+	}
+	ss.Template.Spec.Containers = containers
 }

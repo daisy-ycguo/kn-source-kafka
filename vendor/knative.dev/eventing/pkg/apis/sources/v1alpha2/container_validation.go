@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Knative Authors
+Copyright 2020 The Knative Authors
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha1
+package v1alpha2
 
 import (
 	"context"
 
+	corev1 "k8s.io/api/core/v1"
 	"knative.dev/pkg/apis"
 )
 
@@ -28,11 +29,31 @@ func (c *ContainerSource) Validate(ctx context.Context) *apis.FieldError {
 
 func (cs *ContainerSourceSpec) Validate(ctx context.Context) *apis.FieldError {
 	var errs *apis.FieldError
-	if cs.Sink == nil {
-		fe := apis.ErrMissingField("sink")
-		errs = errs.Also(fe)
-	} else if fe := cs.Sink.Validate(ctx); fe != nil {
+	if fe := cs.Sink.Validate(ctx); fe != nil {
 		errs = errs.Also(fe.ViaField("sink"))
+	}
+
+	// Validate there is at least a container
+	if cs.Template.Spec.Containers == nil || len(cs.Template.Spec.Containers) == 0 {
+		fe := apis.ErrMissingField("containers")
+		errs = errs.Also(fe)
+	} else {
+		for i, c := range cs.Template.Spec.Containers {
+			if ce := isValidContainer(&c); ce != nil {
+				errs = errs.Also(ce.ViaFieldIndex("containers", i))
+			}
+		}
+	}
+	return errs
+}
+
+func isValidContainer(c *corev1.Container) *apis.FieldError {
+	var errs *apis.FieldError
+	if c.Name == "" {
+		errs = errs.Also(apis.ErrMissingField("name"))
+	}
+	if c.Image == "" {
+		errs = errs.Also(apis.ErrMissingField("image"))
 	}
 	return errs
 }

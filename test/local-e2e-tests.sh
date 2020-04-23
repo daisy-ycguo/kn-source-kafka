@@ -82,9 +82,9 @@ function uninstall_sources_crds() {
 # Will create and delete this namespace (used for all tests, modify if you want a different one used)
 export KN_E2E_NAMESPACE=kne2etests
 
-echo "🧪  Setup"
-plugin_test_setup
+#echo "🧪  Setup"
+#plugin_test_setup
 echo "🧪  Testing"
 go test ${base}/test/e2e/ -timeout=45m -test.v -tags "e2e ${E2E_TAGS}" "$@"
-echo "🧪  Teardown"
-plugin_test_teardown
+#echo "🧪  Teardown"
+#plugin_test_teardown
